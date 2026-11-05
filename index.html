@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MD REMON TRADING BOT</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#06101e;color:white;
+ font-family:Arial,sans-serif;padding:18px;
+}
+.container{max-width:450px;margin:25px auto}
+.card{
+ background:#101f32;border:1px solid #28405b;
+ border-radius:18px;padding:22px;margin-bottom:16px;
+}
+h1{text-align:center;color:#f5ca55;font-size:24px}
+.subtitle{text-align:center;color:#9bb0c8}
+label{display:block;margin:16px 0 7px;color:#a9bed5}
+input,select{
+ width:100%;padding:14px;border-radius:10px;
+ background:#081727;color:white;border:1px solid #304966;
+ font-size:16px;
+}
+button{
+ border:0;border-radius:10px;padding:14px;
+ font-size:16px;font-weight:bold;cursor:pointer;
+}
+.login-btn{background:#00d68b;width:100%;margin-top:20px}
+.hidden{display:none}
+.signal{
+ background:#081727;text-align:center;padding:25px;
+ border-radius:15px;margin:18px 0;
+}
+.signal strong{font-size:42px;color:#00e68b}
+.green{background:#078b59;color:white;flex:1}
+.red{background:#c62946;color:white;flex:1}
+.row{display:flex;gap:10px;margin:15px 0}
+.muted{color:#9bb0c8;font-size:13px;line-height:1.6}
+.top{display:flex;justify-content:space-between;align-items:center}
+.badge{color:#00e68b;font-size:13px}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="card" id="login">
+<h1>👑 MD REMON</h1>
+<p class="subtitle">TRADING BOT LOGIN</p>
+
+<label>Login Number</label>
+<input id="number" placeholder="Enter number">
+
+<label>Password</label>
+<input id="password" type="password" placeholder="Enter password">
+
+<button class="login-btn" onclick="login()">LOGIN</button>
+<p id="error" class="muted"></p>
+</div>
+
+<div class="card hidden" id="dashboard">
+<div class="top">
+<h1>MD REMON BOT</h1>
+<span class="badge">● ONLINE</span>
+</div>
+
+<p class="subtitle">QUOTEX SIGNAL DASHBOARD</p>
+
+<div class="signal">
+<p class="muted">AI SIGNAL — DEMO</p>
+<strong id="signal">WAIT</strong>
+<p id="info">Press GET SIGNAL</p>
+</div>
+
+<label>Select Timeframe</label>
+<select id="time">
+<option>5 Seconds</option>
+<option>15 Seconds</option>
+<option>30 Seconds</option>
+</select>
+
+<button class="login-btn" style="width:100%"
+onclick="getSignal()">GET SIGNAL</button>
+
+<div class="row">
+<button class="green" onclick="manual('CALL')">CALL ↑</button>
+<button class="red" onclick="manual('PUT')">PUT ↓</button>
+</div>
+
+<div class="card">
+<h3>Signal History</h3>
+<div id="history" class="muted">No signals yet</div>
+</div>
+
+<p class="muted">
+Demo version only. Signals are random samples,
+not real market predictions. No live Quotex connection
+or automatic trading is enabled.
+</p>
+
+<button onclick="logout()" style="background:#34465b;color:white;width:100%">LOGOUT</button>
+</div>
+</div>
+
+<script>
+const USER="7865432100";
+const PASS="Remon@123";
+
+function login(){
+ const n=document.getElementById("number").value;
+ const p=document.getElementById("password").value;
+
+ if(n===USER && p===PASS){
+ document.getElementById("login").classList.add("hidden");
+ document.getElementById("dashboard").classList.remove("hidden");
+ }else{
+ document.getElementById("error").innerText="Wrong Login Number or Password";
+ }
+}
+
+function logout(){
+ document.getElementById("dashboard").classList.add("hidden");
+ document.getElementById("login").classList.remove("hidden");
+ document.getElementById("password").value="";
+}
+
+function getSignal(){
+ const s=Math.random()>.5?"CALL ↑":"PUT ↓";
+ showSignal(s);
+}
+
+function manual(s){
+ showSignal(s==="CALL"?"CALL ↑":"PUT ↓");
+}
+
+function showSignal(s){
+ const el=document.getElementById("signal");
+ el.innerText=s;
+ el.style.color=s.includes("CALL")?"#00e68b":"#ff5368";
+
+ const t=document.getElementById("time").value;
+ const now=new Date().toLocaleTimeString();
+
+ document.getElementById("info").innerText=t+" | DEMO | "+now;
+
+ const h=document.getElementById("history");
+ if(h.innerText==="No signals yet")h.innerText="";
+ h.innerHTML="<div>"+s+" — "+now+"</div>"+h.innerHTML;
+}
+</script>
+</body>
+  </html>
